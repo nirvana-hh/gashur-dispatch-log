@@ -14,6 +14,10 @@ export const Colors = {
     backgroundElement: '#F0F0F3',
     backgroundSelected: '#E0E1E6',
     textSecondary: '#60646C',
+    /** Page behind a list of cards, a step darker than the cards on it. */
+    backgroundGrouped: '#ECEEF2',
+    card: '#ffffff',
+    cardBorder: '#DDE0E6',
   },
   dark: {
     text: '#ffffff',
@@ -21,8 +25,17 @@ export const Colors = {
     backgroundElement: '#212225',
     backgroundSelected: '#2E3135',
     textSecondary: '#B0B4BA',
+    backgroundGrouped: '#000000',
+    card: '#1C1D20',
+    cardBorder: '#2E3135',
   },
 } as const;
+
+/** Font for page titles and section headings, loaded in the root layout. */
+export const HeadingFont = 'Poppins_700Bold';
+
+/** Brand color for primary actions. */
+export const Accent = '#EA580C';
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
