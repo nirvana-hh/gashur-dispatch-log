@@ -14,3 +14,11 @@ export function writeItem(key: string, value: string) {
     // Storage can be unavailable (private mode, static rendering); the app still runs in memory.
   }
 }
+
+export function removeItem(key: string) {
+  try {
+    globalThis.localStorage?.removeItem(key);
+  } catch {
+    // See writeItem.
+  }
+}

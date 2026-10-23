@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { ScrollView } from 'react-native';
 
 import { Chip } from '@/components/chip';
-import { Button, Field, Input, NumberInput } from '@/components/ui';
+import { AuditLine, Button, Field, Input, NumberInput } from '@/components/ui';
 import { formStyles } from '@/components/form-styles';
 import { useClients, useTrips } from '@/hooks/use-store';
+import { useCanManage, useStaffName } from '@/hooks/use-session';
 import { useTheme } from '@/hooks/use-theme';
 import { confirmAction, showMessage } from '@/lib/confirm';
 import { Currency } from '@/lib/calc';
@@ -21,6 +22,8 @@ export default function ClientFormScreen() {
 
 function ClientForm({ client }: { client?: Client }) {
   const theme = useTheme();
+  const canManage = useCanManage();
+  const staffName = useStaffName();
   const inUse = useTrips().some((t) => t.clientId === client?.id);
   const [name, setName] = useState(client?.name ?? '');
   const [contact, setContact] = useState(client?.contact ?? '');
@@ -90,7 +93,8 @@ function ClientForm({ client }: { client?: Client }) {
         <NumberInput value={creditDays} onChangeText={setCreditDays} style={formStyles.smallInput} />
       </Field>
       <Button label="Save client" onPress={save} disabled={!canSave} />
-      {client && <Button label="Remove client" variant="destructive" onPress={confirmRemove} />}
+      {client && canManage && <Button label="Remove client" variant="destructive" onPress={confirmRemove} />}
+      <AuditLine createdBy={staffName(client?.createdBy)} updatedBy={staffName(client?.updatedBy)} />
     </ScrollView>
   );
 }

@@ -4,7 +4,6 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AlertList } from '@/components/alert-list';
 import { BarChart } from '@/components/bar-chart';
-import { Chip } from '@/components/chip';
 import { Icon } from '@/components/icon';
 import { Card, EmptyText, Section } from '@/components/ui';
 import { Accent, Spacing } from '@/constants/theme';
@@ -46,16 +45,23 @@ export default function DashboardScreen() {
       contentContainerStyle={styles.container}>
       <View style={styles.topRow}>
         <Text style={[styles.date, { color: theme.textSecondary }]}>{formatToday()}</Text>
-        <View style={styles.periods}>
-          {Periods.map((option) => (
-            <Chip
-              key={option.label}
-              label={option.label}
-              selected={option === period}
-              onPress={() => setPeriod(option)}
-              compact
-            />
-          ))}
+        {/* A neutral segmented control, so orange stays reserved for the New button. */}
+        <View style={[styles.periods, { backgroundColor: theme.backgroundElement }]} accessibilityRole="radiogroup">
+          {Periods.map((option) => {
+            const selected = option === period;
+            return (
+              <Pressable
+                key={option.label}
+                onPress={() => setPeriod(option)}
+                accessibilityRole="radio"
+                accessibilityState={{ selected }}
+                style={[styles.period, selected && [styles.periodSelected, { backgroundColor: theme.segmentSelected }]]}>
+                <Text style={[styles.periodText, { color: selected ? theme.text : theme.textSecondary }]}>
+                  {option.label}
+                </Text>
+              </Pressable>
+            );
+          })}
         </View>
       </View>
 
@@ -220,7 +226,20 @@ const styles = StyleSheet.create({
   },
   periods: {
     flexDirection: 'row',
-    gap: Spacing.one,
+    padding: 3,
+    borderRadius: 10,
+  },
+  period: {
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 8,
+  },
+  periodSelected: {
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.15)',
+  },
+  periodText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   stats: {
     flexDirection: 'row',

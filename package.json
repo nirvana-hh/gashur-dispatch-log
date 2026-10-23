@@ -6,6 +6,7 @@
     "@expo-google-fonts/material-symbols": "^0.4.51",
     "@expo-google-fonts/poppins": "^0.4.1",
     "@expo/ui": "~57.0.22",
+    "@supabase/supabase-js": "^2.118.0",
     "expo": "~57.0.27",
     "expo-constants": "~57.0.21",
     "expo-device": "~57.0.2",

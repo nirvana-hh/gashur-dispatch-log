@@ -2,9 +2,10 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView } from 'react-native';
 
-import { Button, Field, Input, NumberInput } from '@/components/ui';
+import { AuditLine, Button, Field, Input, NumberInput } from '@/components/ui';
 import { formStyles } from '@/components/form-styles';
 import { useTrips, useTrucks } from '@/hooks/use-store';
+import { useCanManage, useStaffName } from '@/hooks/use-session';
 import { useTheme } from '@/hooks/use-theme';
 import { confirmAction, showMessage } from '@/lib/confirm';
 import { isValidDate, localDate } from '@/lib/calc';
@@ -18,6 +19,8 @@ export default function TruckFormScreen() {
 
 function TruckForm({ truck }: { truck?: Truck }) {
   const theme = useTheme();
+  const canManage = useCanManage();
+  const staffName = useStaffName();
   const inUse = useTrips().some((t) => t.truckId === truck?.id);
   const [plate, setPlate] = useState(truck?.plate ?? '');
   const [capacity, setCapacity] = useState(String(truck?.capacityLitres ?? 33000));
@@ -80,7 +83,8 @@ function TruckForm({ truck }: { truck?: Truck }) {
         <Input value={inspection} onChangeText={setInspection} autoCorrect={false} />
       </Field>
       <Button label="Save truck" onPress={save} disabled={!canSave} />
-      {truck && <Button label="Remove truck" variant="destructive" onPress={confirmRemove} />}
+      {truck && canManage && <Button label="Remove truck" variant="destructive" onPress={confirmRemove} />}
+      <AuditLine createdBy={staffName(truck?.createdBy)} updatedBy={staffName(truck?.updatedBy)} />
     </ScrollView>
   );
 }

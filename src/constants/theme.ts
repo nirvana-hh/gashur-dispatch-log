@@ -18,6 +18,8 @@ export const Colors = {
     backgroundGrouped: '#ECEEF2',
     card: '#ffffff',
     cardBorder: '#DDE0E6',
+    /** The chosen option in a segmented control, raised above its track. */
+    segmentSelected: '#ffffff',
   },
   dark: {
     text: '#ffffff',
@@ -28,6 +30,7 @@ export const Colors = {
     backgroundGrouped: '#000000',
     card: '#1C1D20',
     cardBorder: '#2E3135',
+    segmentSelected: '#45484E',
   },
 } as const;
 

@@ -2,8 +2,9 @@ import { Link, router, Stack, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from '@/components/icon';
-import { Badge, Button, Card, Detail, DetailGrid } from '@/components/ui';
+import { AuditLine, Badge, Button, Card, Detail, DetailGrid } from '@/components/ui';
 import { Accent, Spacing } from '@/constants/theme';
+import { useCanManage, useStaffName } from '@/hooks/use-session';
 import { useClients, useDrivers, useTrips, useTrucks } from '@/hooks/use-store';
 import { useTheme } from '@/hooks/use-theme';
 import {
@@ -32,6 +33,8 @@ export default function TripScreen() {
   const clients = useClients();
   const trucks = useTrucks();
   const drivers = useDrivers();
+  const canManage = useCanManage();
+  const staffName = useStaffName();
 
   if (!trip) {
     return (
@@ -116,7 +119,7 @@ export default function TripScreen() {
             <Detail label="Margin" value={`${formatMoney(f.margin)} (${formatPct(f.marginPct)})`} color={f.margin < 0 ? UrgencyColors.overdue : undefined} />
             <Detail label="POD" value={trip.delivery.podReceived ? 'Received' : 'Missing'} color={trip.delivery.podReceived ? undefined : UrgencyColors.overdue} wide />
           </DetailGrid>
-          {f.lossFlagged && !trip.lossReviewed && (
+          {f.lossFlagged && !trip.lossReviewed && canManage && (
             <Button label="Mark loss as reviewed" variant="secondary" onPress={() => markLossReviewed(trip.id)} />
           )}
         </StageCard>
@@ -145,7 +148,8 @@ export default function TripScreen() {
       {next && (
         <Button label={next.label} onPress={() => router.push({ pathname: '/trips/form', params: { id: trip.id, stage: next.stage } })} />
       )}
-      <Button label="Delete trip" variant="destructive" onPress={confirmDelete} />
+      {canManage && <Button label="Delete trip" variant="destructive" onPress={confirmDelete} />}
+      <AuditLine createdBy={staffName(trip.createdBy)} updatedBy={staffName(trip.updatedBy)} />
     </ScrollView>
   );
 }

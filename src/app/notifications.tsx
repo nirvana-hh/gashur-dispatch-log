@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AlertList } from '@/components/alert-list';
 import { Card, EmptyText, Section } from '@/components/ui';
 import { Accent, Spacing } from '@/constants/theme';
-import { useDrivers, useNotifications, useTrucks } from '@/hooks/use-store';
+import { useStaffName } from '@/hooks/use-session';
+import { useDrivers, useNotifications, useReadAt, useTrucks } from '@/hooks/use-store';
 import { useTheme } from '@/hooks/use-theme';
 import { driverAlerts, formatDayTime, truckAlerts, UrgencyColors } from '@/lib/calc';
 import { markAllRead, type NotificationKind } from '@/lib/store';
@@ -23,7 +24,11 @@ export default function NotificationsScreen() {
   const notifications = useNotifications();
   const compliance = [...driverAlerts(useDrivers()), ...truckAlerts(useTrucks())];
 
-  // Opening the list counts as reading it; unread dots stay visible until it closes.
+  const staffName = useStaffName();
+  // Opening the list counts as reading it; unread dots, judged against the read time
+  // when the list opened, stay visible until it closes.
+  const readAt = useReadAt();
+  const [readAtOnOpen] = useState(readAt);
   useEffect(() => markAllRead, []);
 
   return (
@@ -48,9 +53,12 @@ export default function NotificationsScreen() {
             <View style={styles.text}>
               <Text style={[styles.title, { color: theme.text }]}>{n.title}</Text>
               <Text style={[styles.body, { color: theme.textSecondary }]}>{n.body}</Text>
-              <Text style={[styles.time, { color: theme.textSecondary }]}>{formatDayTime(n.at)}</Text>
+              <Text style={[styles.time, { color: theme.textSecondary }]}>
+                {formatDayTime(n.at)}
+                {staffName(n.createdBy) ? ` · by ${staffName(n.createdBy)}` : ''}
+              </Text>
             </View>
-            {!n.read && <View style={styles.unread} accessibilityLabel="Unread" />}
+            {n.at > readAtOnOpen && <View style={styles.unread} accessibilityLabel="Unread" />}
           </Pressable>
         ))}
       </Section>

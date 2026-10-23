@@ -7,3 +7,6 @@ export const useTrucks = () => useSyncExternalStore(subscribe, () => getState().
 export const useDrivers = () => useSyncExternalStore(subscribe, () => getState().drivers);
 export const useClients = () => useSyncExternalStore(subscribe, () => getState().clients);
 export const useNotifications = () => useSyncExternalStore(subscribe, () => getState().notifications);
+export const useStaff = () => useSyncExternalStore(subscribe, () => getState().staff);
+/** Notifications after this time are unread. */
+export const useReadAt = () => useSyncExternalStore(subscribe, () => getState().notificationsReadAt);

@@ -2,9 +2,10 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView } from 'react-native';
 
-import { Button, Field, Input } from '@/components/ui';
+import { AuditLine, Button, Field, Input } from '@/components/ui';
 import { formStyles } from '@/components/form-styles';
 import { useDrivers, useTrips } from '@/hooks/use-store';
+import { useCanManage, useStaffName } from '@/hooks/use-session';
 import { useTheme } from '@/hooks/use-theme';
 import { confirmAction, showMessage } from '@/lib/confirm';
 import { isValidDate, localDate } from '@/lib/calc';
@@ -18,6 +19,8 @@ export default function DriverFormScreen() {
 
 function DriverForm({ driver }: { driver?: Driver }) {
   const theme = useTheme();
+  const canManage = useCanManage();
+  const staffName = useStaffName();
   const inUse = useTrips().some((t) => t.driverId === driver?.id);
   const [name, setName] = useState(driver?.name ?? '');
   const [phone, setPhone] = useState(driver?.phone ?? '');
@@ -63,7 +66,8 @@ function DriverForm({ driver }: { driver?: Driver }) {
         <Input value={licenseExpiry} onChangeText={setLicenseExpiry} autoCorrect={false} />
       </Field>
       <Button label="Save driver" onPress={save} disabled={!canSave} />
-      {driver && <Button label="Remove driver" variant="destructive" onPress={confirmRemove} />}
+      {driver && canManage && <Button label="Remove driver" variant="destructive" onPress={confirmRemove} />}
+      <AuditLine createdBy={staffName(driver?.createdBy)} updatedBy={staffName(driver?.updatedBy)} />
     </ScrollView>
   );
 }

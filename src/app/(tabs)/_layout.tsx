@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 
-import { AddButton, BellButton, HeaderActions } from '@/components/header-buttons';
+import { AccountButton, AddButton, BellButton, HeaderActions } from '@/components/header-buttons';
 import { Icon } from '@/components/icon';
 import { Accent, HeadingFont } from '@/constants/theme';
 
@@ -21,6 +21,7 @@ export default function TabLayout() {
             <HeaderActions>
               <AddButton href="/trips/form" label="New trip" />
               <BellButton />
+              <AccountButton />
             </HeaderActions>
           ),
         }}
@@ -34,6 +35,7 @@ export default function TabLayout() {
             <HeaderActions>
               <AddButton href="/trips/form" label="New trip" />
               <BellButton />
+              <AccountButton />
             </HeaderActions>
           ),
         }}
@@ -46,6 +48,7 @@ export default function TabLayout() {
           headerRight: () => (
             <HeaderActions>
               <BellButton />
+              <AccountButton />
             </HeaderActions>
           ),
         }}
@@ -59,6 +62,7 @@ export default function TabLayout() {
             <HeaderActions>
               <AddButton href="/edit/client" label="New client" />
               <BellButton />
+              <AccountButton />
             </HeaderActions>
           ),
         }}

@@ -8,3 +8,7 @@ export function readItem(key: string): string | null {
 export function writeItem(key: string, value: string) {
   Storage.setItemSync(key, value);
 }
+
+export function removeItem(key: string) {
+  Storage.removeItemSync(key);
+}

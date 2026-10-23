@@ -100,6 +100,14 @@ export function DetailGrid({ children }: { children: React.ReactNode }) {
   return <View style={styles.details}>{children}</View>;
 }
 
+/** "Created by Musa · last changed by Ngozi", once the record has synced. */
+export function AuditLine({ createdBy, updatedBy }: { createdBy?: string; updatedBy?: string }) {
+  const theme = useTheme();
+  if (!createdBy && !updatedBy) return null;
+  const parts = [createdBy && `Created by ${createdBy}`, updatedBy && updatedBy !== createdBy && `last changed by ${updatedBy}`].filter(Boolean);
+  return <Text style={[styles.audit, { color: theme.textSecondary }]}>{parts.join(' · ')}</Text>;
+}
+
 export function EmptyText({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
   return <Text style={[styles.empty, { color: theme.textSecondary }]}>{children}</Text>;
@@ -196,5 +204,9 @@ export const styles = StyleSheet.create({
   },
   empty: {
     fontSize: 15,
+  },
+  audit: {
+    fontSize: 13,
+    textAlign: 'center',
   },
 });

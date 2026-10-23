@@ -16,5 +16,7 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+  ],
+  // Edge functions run on Deno with their own imports; they aren't part of the app build.
+  "exclude": ["supabase/functions"]
 }
