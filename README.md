@@ -1,4 +1,4 @@
-# Gashur Energy Dispatch Log
+# Gashur Dispatch Log
 
 An internal mobile app for Gashur Energy Limited's office and dispatch staff. It registers fuel-haulage trips, follows each one from depot to customer to payment, and shows the business on a dashboard.
 
